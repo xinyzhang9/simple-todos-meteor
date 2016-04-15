@@ -22,11 +22,22 @@ Meteor.methods({
     });
   },
   'tasks.remove'(taskId) {
+
+  	var task_user = Tasks.findOne({_id : taskId}).username;
+  	if (! Meteor.userId() || Meteor.userId() !== task_user) {
+      throw new Meteor.Error('not-authorized');
+    }
+
     check(taskId, String);
  
     Tasks.remove(taskId);
   },
   'tasks.setChecked'(taskId, setChecked) {
+  	var task_user = Tasks.findOne({_id : taskId}).username;
+  	if (! Meteor.userId() || Meteor.userId() !== task_user) {
+      throw new Meteor.Error('not-authorized');
+    }
+
     check(taskId, String);
     check(setChecked, Boolean);
  
